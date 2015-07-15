@@ -24,6 +24,7 @@ class Menuapi extends REST_Controller {
         parent::__construct();
 
         $this->load->database();
+        $this->load->model('menu_model');
         //$this->load->model('menu_model');
 
         // Configure limits on our controller methods
@@ -38,51 +39,31 @@ class Menuapi extends REST_Controller {
     {      
         if (!$this->get('id'))
         {
-            $this->response(NULL, 400);
+            $this->menus_get();
+          //$this->response(NULL, 400);
         }
 
-        $this->load->model('menu_model');
-        $menu = $this->menu_model->get($this->get('id'));
+        $menu = $this->menu_model->getbyid($this->get('id'));
 
         if ($menu) {
             $this->response($menu, 200);
         } else {
             $this->response(['error' => 'User could not be found'], 400);
         }
-        
-        // $user = $this->some_model->getSomething( $this->get('id') );
-/*
-        $users = [
-            1 => ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-            2 => ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-            3 => ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-        ];
-
-        $user = @$users[$this->get('id')];
-
-        if ($user)
-        {
-            $this->response($user, 200); // 200 being the HTTP response code
-        }
-
-        else
-        {
-            $this->response(['error' => 'User could not be found'], 404);
-        }
-*/
     }
 
-    function menu_post()
+    public function menu_post()
     {
-        // $this->some_model->update_user($this->get('id'));
-        $message = [
-            'id' => $this->get('id'),
-            'name' => $this->post('name'),
-            'email' => $this->post('email'),
-            'message' => 'Added a resource'
-        ];
+        $data = array('label'=> $this->post('label'),
+                      'num'=> $this->post('num'));   
 
-        $this->response($message, 201); // 201 being the HTTP response code
+        $rtv = $this->menu_model->create($data);
+
+        if ($rtv) {
+            $this->response("SUCCESS", 201); // 201 being the HTTP response code
+        } else {
+            $this->response(['error' => 'ERROR'], 400);
+        }
     }
 
     function menu_delete()
@@ -115,14 +96,10 @@ class Menuapi extends REST_Controller {
             $this->response(['error' => 'Couldn\'t find any users!'], 404);
         }
     }
-
-    public function send_post()
-    {
-        var_dump($this->request->body);
-    }
-
+   
     public function send_put()
     {
+        echo "test1";        
         var_dump($this->put('foo'));
     }
 }
