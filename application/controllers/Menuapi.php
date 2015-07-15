@@ -54,13 +54,15 @@ class Menuapi extends REST_Controller {
 
     public function menu_post()
     {
-        $data = array('label'=> $this->post('label'),
-                      'num'=> $this->post('num'));   
+        $data = array(
+            'label'=> $this->post('label'),
+            'num'=> $this->post('num')
+        );   
 
         $rtv = $this->menu_model->create($data);
 
         if ($rtv) {
-            $this->response("SUCCESS", 201); // 201 being the HTTP response code
+            $this->response("{'_id':'". $rtv ."'}", 201); // 201 being the HTTP response code
         } else {
             $this->response(['error' => 'ERROR'], 400);
         }
@@ -80,20 +82,12 @@ class Menuapi extends REST_Controller {
     function menus_get()
     {
         // $users = $this->some_model->get_something($this->get('limit'));
-        $users = [
-            ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-            ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-            3 => ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-        ];
+        $menues = $this->menu_model->gets();
 
-        if ($users)
-        {
-            $this->response($users, 200); // 200 being the HTTP response code
-        }
-
-        else
-        {
-            $this->response(['error' => 'Couldn\'t find any users!'], 404);
+        if ($menues) {
+            $this->response($menues, 200);
+        } else {
+            $this->response(['error' => 'could not find any users'], 400);
         }
     }
    
