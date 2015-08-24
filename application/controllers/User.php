@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH . '/libraries/REST_Controller.php';
+require APPPATH . '/libraries/Snoopy.class.php';
+
 
 /**
  * This is an example of a few basic user interaction methods you could use
@@ -33,6 +35,32 @@ class User extends REST_Controller {
 
     function user_get()
     {
+        $snoopy = new Snoopy;
+        //$snoopy->fetch("http://am0100.com/");
+        //preg_match('/<ul id="restaurants">(.*?)<\/ul>/is', $snoopy->results, $text);
+
+        $snoopy->fetch("https://www.yogiyo.co.kr/%EB%8C%80%EA%B5%AC/701021/");
+        $regexp='/<ul id="restaurants">(.*?)<\/ul>/is';
+        //'/<ul class="list_type_1 search_list">(.*?)<\/ul>/is'
+        preg_match($regexp, $snoopy->results, $text);
+
+        //var_dump($snoopy->results);
+        var_dump($text);
+        echo '</br>';
+        echo '</br>';
+        echo '</br>';
+        echo '</br>';
+        echo '</br>';   
+        var_dump($snoopy->scheme);        echo '</br>';   
+        var_dump($snoopy->host);        echo '</br>';   
+        /*
+        for($i=0; $i<count($snoopy); $i++) {
+            var_dump($snoopy[$i]);
+        }
+        */
+
+
+        /*
     	echo "test";
         if (!$this->get('id'))
         {
@@ -58,6 +86,7 @@ class User extends REST_Controller {
         {
             $this->response(['error' => 'User could not be found'], 404);
         }
+        */
     }
 
     function user_post()

@@ -36,7 +36,7 @@ class Menuapi extends REST_Controller {
     }
 
     function menu_get()
-    {      
+    {     
         if (!$this->get('id'))
         {
             $this->menus_get();
